@@ -5,20 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 import org.springframework.data.annotation.Immutable;
 
-import java.net.URI;
-
 @Immutable
 @Value
-public class SearchResults {
+public class ShowDetails {
 
     String title;
     String serviceName;
-    URI image;
+    String image;
 
     @JsonCreator
-    public SearchResults(@JsonProperty("title") String title,
-                         @JsonProperty("serviceName") String serviceName,
-                         @JsonProperty("image") URI image) {
+    public ShowDetails(@JsonProperty("title") String title,
+                       @JsonProperty("serviceName") String serviceName,
+                       @JsonProperty("image") String image) {
         this.title = title;
         this.serviceName = serviceName;
         this.image = image;

@@ -1,12 +1,14 @@
 package ye.golovnya.streamr.dtos;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
-public class UserCreateDto {
+import java.util.List;
+
+@Value
+public class UserDto {
 
     String firstName;
     String lastName;
     String email;
-    String password;
+    List<Long> shows;
 }

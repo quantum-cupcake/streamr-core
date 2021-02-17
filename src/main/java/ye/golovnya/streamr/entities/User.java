@@ -9,9 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -66,7 +71,7 @@ public class User implements UserDetails {
         return true;
     }
 
-//    @ManyToMany
-//    @JoinTable(name = "users_shows", joinColumns = @JoinColumn(name = "show_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private List<Show> shows;
+    @ManyToMany
+    @JoinTable(name = "users_shows", joinColumns = @JoinColumn(name = "show_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Show> shows = new ArrayList<>();
 }

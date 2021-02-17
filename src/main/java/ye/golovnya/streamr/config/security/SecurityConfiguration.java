@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import ye.golovnya.streamr.controllers.urls.UserUrlConstants;
 
 @EnableWebSecurity
@@ -33,14 +34,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
+                .authorizeRequests().antMatchers(UserUrlConstants.REGISTER)
+                .permitAll()
+                .and()
                 .authorizeRequests().antMatchers(UserUrlConstants.ROOT + UserUrlConstants.REGISTER)
                 .permitAll()
                 .and()
-                .authorizeRequests().antMatchers(UserUrlConstants.ROOT + "/**").authenticated()
+                .authorizeRequests().antMatchers( "/**").authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/main", false)
                 .and()
                 .logout().logoutUrl("/logout");
     }
@@ -48,6 +52,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
     }
 
     @Bean

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--    <div th:replace="fragments/header :: header-css"/>-->
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+    <h2>Search for your shows</h2>
+    <form id="search-form" action="#" method="post" th:action="@{/search}">
+        <p>Show name: <input type="text" name="partialTitle"> </p>
+        <input type="submit"/>
+    </form>
+    <script>
+        let form = document.getElementById("search-form")
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            let dto = {};
+            for (let i = 0, ii = form.length; i < ii; ++i) {
+                let input = form[i];
+                if (input.name) {
+                    dto[input.name] = input.value;
+                }
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+            xhr.send(JSON.stringify(dto));
+            xhr.onloadend = function () {
+                // done
+            };
+            xhr.onreadystatechange = function () { // listen for state changes
+                if (xhr.readyState == 4 && xhr.status == 200) { // when completed we can move away
+                    window.location.href='/main'
+                }
+            };
+        }
+    </script>
+</div>
+<div>
+    <h3 id="top-services-title" style="display: none">Your top streaming service is: </h3><h3 id="top-services" style="display: none"></h3>
+</div>
+<div>
+    <h1 id="shows-table-title">Your shows</h1>
+    <table border="1" style="display: none" id="shows-table">
+        <thead>
+        <tr>
+            <th> Title </th>
+            <th> Platform </th>
+            <th> Pic </th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    //first add an event listener for page load
+    document.addEventListener( "DOMContentLoaded", get_json_data, false ); // get_json_data is the function name that will fire on page load
+
+    //this function is in the event listener and will execute on page load
+    function get_json_data(){
+        // Relative URL of external json file
+        let json_url = '/shows/top-services';
+
+        //Build the XMLHttpRequest (aka AJAX Request)
+        let xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {//when a good response is given do this
+
+                let data = JSON.parse(this.responseText); // convert the response to a json object
+                append_json(data);// pass the json object to the append_json function
+            }
+        }
+        //set the request destination and type
+        xmlhttp.open("GET", json_url, true);
+        //set required headers for the request
+        // send the request
+        xmlhttp.send(); // when the request completes it will execute the code in onreadystatechange section
+    }
+
+    function append_json(data){
+        if(data.topServices.length !== 0) {
+            let top = document.getElementById('top-services');
+            let topTitle = document.getElementById('top-services-title');
+            top.textContent = data.topServices.join(';');
+            top.style.display = 'block';
+            topTitle.style.display = 'block';
+        }
+
+        if(data.showsList.length !== 0) {
+            let table = document.getElementById('shows-table');
+            let tableTitle = document.getElementById('shows-table-title');
+            data.showsList.forEach(function(object) {
+                let tr = document.createElement('tr');
+                tr.innerHTML = '<td>' + object.title + '</td>' +
+                    '<td>' + object.serviceName + '</td>' +
+                    '<td><img alt="altText" src="' + object.image + '" style="max-height:180px;max-width:320px;"></td>'
+                table.appendChild(tr);
+            });
+            table.style.display='block';
+            tableTitle.style.display='block';
+        }
+    }
+</script>
+
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

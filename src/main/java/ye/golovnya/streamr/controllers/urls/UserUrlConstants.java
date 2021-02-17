@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserUrlConstants {
 
-    public static final String ROOT = "/user";
+    public static final String ROOT = "/users";
 
     public static final String REGISTER = "/register";
 

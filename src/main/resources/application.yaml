@@ -1,1 +1,3 @@
-
+streamr:
+  microservices:
+    api-utelly: localhost:9090

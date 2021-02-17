@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Spring Boot Thymeleaf + Spring Security</title>
+
+<!--    <div th:replace="fragments/header :: header-css"></div>-->
+
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <h1>New user</h1>
+    <form id="signup-form" action="#" method="post" th:action="@{/users/register}">
+        <label>First name: <input type="text" name="firstName"> </label><br/>
+        <label>Last name: <input type="text" name="lastName"> </label><br/>
+        <label>Password: <input type="text" name="password" /></label><br/>
+        <label>E-mail: <input type="text" name="email" /></label><br/>
+        <input type="submit"/>
+    </form>
+
+    <script>
+        var form = document.getElementById("signup-form");
+
+        form.onsubmit = function (e) {
+            // stop the regular form submission
+            e.preventDefault();
+
+            // collect the form data while iterating over the inputs
+            var data = {};
+            for (var i = 0, ii = form.length; i < ii; ++i) {
+                var input = form[i];
+                if (input.name) {
+                    data[input.name] = input.value;
+                }
+            }
+
+            // construct an HTTP request
+            var xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+            // send the collected data as JSON
+            xhr.send(JSON.stringify(data));
+
+            xhr.onloadend = function () {
+                // done
+            };
+            xhr.onreadystatechange = function() { // listen for state changes
+                if (xhr.readyState == 4 && xhr.status == 200) { // when completed we can move away
+                    window.location = "/";
+                }
+            }
+        };
+    </script>
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

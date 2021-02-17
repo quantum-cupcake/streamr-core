@@ -1,5 +1,7 @@
 package ye.golovnya.streamr.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 import org.springframework.data.annotation.Immutable;
 
@@ -11,9 +13,10 @@ import java.util.List;
 @Value
 public class SearchResponseDto {
 
-    List<SearchResults> searchResults;
+    List<ShowDetails> searchResults;
 
-    public SearchResponseDto(@NotNull List<SearchResults> searchResults) {
+    @JsonCreator
+    public SearchResponseDto(@JsonProperty("searchResults") @NotNull List<ShowDetails> searchResults) {
         this.searchResults = Collections.unmodifiableList(searchResults);
     }
 }
